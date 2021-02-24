@@ -14,19 +14,15 @@ class CreatePost(forms.ModelForm):
                     'placeholder': "slug",
                     'class': 'form-control ',
                     'value':datetime.now().strftime("%S%f"),
-                }
-
-            ),
-
+                    }
+                ),
             )
+
     class Meta:
         model = Post
         fields = ['title','author','content','slug']
 
         
-            
-        
-
 class SignUpForm(UserCreationForm):
     password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
     class Meta:
