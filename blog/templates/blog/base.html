@@ -44,11 +44,9 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
+                    {%if request.user.is_authenticated%}
                         <li class="nav-item text-black">
-                            <form method="get" action='/search'>
-                                <input type='text' name='search' id='search' placeholder='Search...'>
-                                <button type='button' class='mainbtn'>Search</button>
-                            </form>
+                            <a class="nav-link text-black font-weight-bold" href="/logout">Logout</a>
                         </li>
                         <li class="nav-item text-black">
                             <a class="nav-link text-black font-weight-bold" href="/createpost">Create</a>
@@ -56,21 +54,14 @@
                         <li class="nav-item text-black">
                             <a class="nav-link text-black font-weight-bold" href="{% url 'blog:user_list' %}">User Blogs</a>
                         </li>
-                        <li class="nav-item text-black">
-                            <a class="nav-link text-black font-weight-bold" href="/signup">Register</a>
-                        </li>
-                       
-                    {%if request.user.is_authenticated%}
-                        <li class="nav-item text-black">
-                            <a class="nav-link text-black font-weight-bold" href="/logout">Logout</a>
-                        </li>
                     {% else %}
+                    <li class="nav-item text-black">
+                        <a class="nav-link text-black font-weight-bold" href="/signup">Register</a>
+                    </li>
                     <li class="nav-item text-black">
                         <a class="nav-link text-black font-weight-bold" href="/login">Login</a>
                     </li>
                     {%endif%}
-                       
-                        
                     </ul>
                 </div>
             </div>
@@ -80,7 +71,7 @@
         {% endblock content %}
         <!-- Footer -->
         <footer class="py-3 bg-grey">
-            <p class="m-0 text-dark text-center ">Copyright &copy; Heavy Driver</p>
+            <p class="m-0 text-dark text-center ">Copyright &copy; ABC</p>
         </footer>
     </body>
 </html>

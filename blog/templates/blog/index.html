@@ -22,8 +22,17 @@
         <div class="row">
             <div class=" col-md-8 col-md-10 mx-auto">
                 <div class="site-heading">
-                    <h3 class=" site-heading my-4 mt-3 text-white"> Welcome {{ request.user }}!!! </h3>
-                    <br><br>
+                    <h3 class="site-heading my-4 mt-3 text-white"> Welcome {{ request.user }}!!! </h3>
+                    <h3 class="nav-item text-black">
+                        <form method="GET" action="{% url 'blog:home' %}">
+                            <input type='text' name='q' id='q' placeholder='Search...' value="{{request.GET.q}}">
+                            <button type='submit' class='btn btn-success'>Search</button>
+                        </form>
+                    </h3>
+
+                    <br>
+                    <a class="nav-link text-white font-weight-bold" href="category_list/">Add Category</a>
+                    <br>
                 </div>
             </div>
         </div>
@@ -33,20 +42,21 @@
     <div class="row">
         <!-- Blog Entries Column -->
         <div class="col-md-8 mt-3 left">
-            {% for post in data %}
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h2 class="card-title">{{ post.title }}</h2>
-                    <p class="card-text text-muted h6">{{ post.author }} | {{ post.created_on}} </p>
-                    <p class="card-text">{{post.content|slice:":200" }}</p>
-                    {%if post.slug%}
-                    <a href="{% url 'blog:post_detail' post.slug  %}" class="btn btn-primary">Read More &rarr;</a>
-                    {%endif%}
+                {% for post in data %}
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ post.title }}</h2>
+                        <p class="card-text text-muted h6">{{ post.category }}</p>
+                        <p class="card-text text-muted h6">{{ post.author }} | {{ post.created_on}} </p>
+                        <p class="card-text">{{post.content|slice:":200" }}</p>
+                        {%if post.slug%}
+                        <a href="{% url 'blog:post_detail' post.slug  %}" class="btn btn-primary">Read More &rarr;</a>
+                        {%endif%}
+                    </div>
                 </div>
-            </div>
-            {% endfor %}
-
-            <div>
+                {% endfor %}
+            
+                <div>
                 <span>
                     {% if data.has_previous %}
                         <a href="?page={{ data.previous_page_number }}">Previous</a>

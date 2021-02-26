@@ -13,7 +13,7 @@
                     {% endfor %}
                 {% endif %}
                 {% for fm in form %}
-                    {{fm.label_tag}}<br>{{fm}}{{fm.errors|striptags}}<br>
+                    {{fm.label_tag}}{{fm}}{{fm.errors|striptags}}<br><br>
                 {% endfor %}
             <br>
             <input type="submit" value="submit">
