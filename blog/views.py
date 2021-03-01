@@ -4,7 +4,7 @@ from blog.models import Post, Category
 from blog.forms import CreatePost, SignUpForm, CategoryForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 
 
@@ -15,19 +15,54 @@ from django.db.models import Q
 
 def post_list(request):
     if request.user.is_authenticated:
+        context = {}
         if request.GET.get('q'):
+            context = {}
             query = request.GET.get('q')
+            context['query'] = query
             blogs = Post.objects.filter(Q(title__icontains = query) | Q(content__icontains = query))
             paginator = Paginator(blogs, 5)
             page_number = request.GET.get('page')
-            page_obj = paginator.get_page(page_number)
-            return(render(request, 'blog/index.html', {'data':page_obj}))
+            try:
+                blogs = paginator.page(page_number)
+            except PageNotAnInteger:
+                blogs = paginator.page(1)
+            except EmptyPage:
+                blogs = paginator.page(paginator.num_pages)
+            context['blogs'] = blogs
+            return(render(request, 'blog/index.html', context))
+        elif request.GET.get('q, category'):
+            query = request.GET.get('q')
+            query2 = request.GET.get('category')
+            blog_query1 = Post.objects.filter(Q(category__title__icontains = query2) )
+            blog_query2 = Post.objects.filter(Q(title__icontains = query) | Q(content__icontains = query))
+            blogs = blog_query1 | blog_query2
+            paginator = Paginator(blogs, 5)
+            page_number = request.GET.get('page')
+            try:
+                blogs = paginator.page(page_number)
+            except PageNotAnInteger:
+                blogs = paginator.page(1)
+            except EmptyPage:
+                blogs = paginator.page(paginator.num_pages)
+            context['blogs'] = blogs
+            context['category2'] = query2
+            context['query'] = query
+            return (render(request, 'blog/index.html', context))
         else:
             data = Post.objects.all().order_by('-created_on')
+            data_category = Category.objects.all()
             paginator = Paginator(data, 5)
             page_number = request.GET.get('page')
-            page_obj = paginator.get_page(page_number)
-            return (render(request, 'blog/index.html',{'data':page_obj,'name': request.user}))
+            try:
+                blogs = paginator.page(page_number)
+            except PageNotAnInteger:
+                blogs = paginator.page(1)
+            except EmptyPage:
+                blogs = paginator.page(paginator.num_pages)
+            context['blogs'] = blogs
+            context['data_category'] = data_category
+            return (render(request, 'blog/index.html',context))
     else:
         return(HttpResponseRedirect('/login/'))
 

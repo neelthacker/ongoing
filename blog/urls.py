@@ -13,6 +13,7 @@ urlpatterns = [
     path(r'logout/', views.log_out, name='logout'),
     path(r'user_list/', views.user_list, name='user_list'),
     path(r'category_list/', views.add_category, name='category'),
+    # path(r'search_category/', views.search_category, name='search_category'),
     
 
     # path(r'<search:search>/$', views.search_blog, name='search_blog'),

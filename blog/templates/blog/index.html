@@ -29,10 +29,23 @@
                             <button type='submit' class='btn btn-success'>Search</button>
                         </form>
                     </h3>
-
                     <br>
-                    <a class="nav-link text-white font-weight-bold" href="category_list/">Add Category</a>
+                    <h4><a class="nav-link text-white font-weight-bold" href="category_list/">Add Category</a></h4>
                     <br>
+                    <h4>
+                        <form method="GET" action="{% url 'blog:home'%}" value="{{request.GET.category}},{{request.GET.q}}">
+                          <label for="category">Select Category</label>
+                          <select name="category" id="category">
+                            {% for i in data_category %}
+                            <option value="{{ i.title }}">{{ i.title }}</option>
+                            {% endfor %}
+                          </select>
+                          <input type='text' name='q' id='q' placeholder='Search...'>
+                          <button type='submit' class='btn btn-success'>Search</button>
+                          <br>
+                        </form>
+                    </h4>
+                    
                 </div>
             </div>
         </div>
@@ -42,7 +55,7 @@
     <div class="row">
         <!-- Blog Entries Column -->
         <div class="col-md-8 mt-3 left">
-                {% for post in data %}
+                {% for post in blogs %}
                 <div class="card mb-4">
                     <div class="card-body">
                         <h2 class="card-title">{{ post.title }}</h2>
@@ -57,15 +70,20 @@
                 {% endfor %}
             
                 <div>
-                <span>
-                    {% if data.has_previous %}
-                        <a href="?page={{ data.previous_page_number }}">Previous</a>
-                    {% endif %}
 
-                    <span>{{ data.number }}</span>
-                    
+                <span>
+                    {% if blogs.has_previous %}
+                        <a href="?{% if query %}q={{query}}&{%endif%}{% if category2 %}category={{category2}}&{%endif%}page={{ blogs.previous_page_number}}">Previous</a>
+                    {% endif %}
+                    {% for i in blogs.paginator.page_range %}
+                        {% if blogs.number == i %}
+                            <span><a class="page-link">{{i}}</a></span>
+                        {% else %}
+                        <a class="page-link" href='?{% if query %}q={{query}}&{%endif%}{% if category2 %}category={{category2}}&{%endif%}page={{ i }}'>{{i}}</a>
+                        {% endif %}
+                    {% endfor %}
                     {% if data.has_next %}
-                        <a href="?page={{ data.next_page_number }}">Next</a>
+                        <a href="?{% if query %}q={{query}}&{%endif%}{% if category2 %}category={{category2}}&{%endif%}page={{ blogs.next_page_number}}">Next</a>
                     {% endif %}
                 </span>
             </div>
