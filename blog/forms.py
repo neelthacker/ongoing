@@ -9,7 +9,7 @@ class CreatePost(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ['title', 'category','content']
+        fields = ['title', 'category', 'content']
 
 
 class SignUpForm(UserCreationForm):
@@ -26,4 +26,4 @@ class SignUpForm(UserCreationForm):
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
-        fields = ['title',]
+        fields = ['title', ]
