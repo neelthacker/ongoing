@@ -1,0 +1,22 @@
+{% extends 'blog/base.html' %} {% block content %}<br>
+<center><h3>Blogs</h3></center>
+
+{# icon and search-box #}
+<div class="col-6 align-left">
+  <i id="search-icon" class="fas fa-search"></i>
+  <input id="user-input" placeholder="Search">
+</div><br>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 card mb-4  mt-3 left  top">
+      <div class="card-body">
+ 
+  
+
+  {# artist-list section #}
+  <div id="replaceable-content" class="col-6">
+    {% include 'blog/ajax-blogs-data.html' %}
+  </div><br>
+
+</div></div></div></div>
+{% endblock content %}
