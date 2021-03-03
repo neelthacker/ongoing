@@ -1,10 +1,13 @@
-from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
 from blog.models import Post, Category
 from blog.forms import CreatePost, SignUpForm, CategoryForm
+
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import JsonResponse
 from django.db.models import Q
+from django.contrib.auth import authenticate, login, logout
+from django.template.loader import render_to_string
+from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
 
 
 def post_list(request):
@@ -12,23 +15,33 @@ def post_list(request):
         context = {}
         data_category = Category.objects.all()
         context['data_category'] = data_category
-        if request.GET.get('category'):
+        if request.GET.get('category') or request.GET.get('q'):
             query = request.GET.get('q')
             query2 = request.GET.get('category')
             caterory_search = 0
             context['category_search'] = caterory_search
-            blog_query1 = Post.objects.filter(
-                Q(category__title__icontains=query2))
             if request.GET.get('q'):
-                blog_query2 = Post.objects.filter(
+                blog_query = Post.objects.filter(
                     Q(title__icontains=query) | Q(content__icontains=query))
-                blogs = blog_query1 & blog_query2
-            else:
-                blogs = blog_query1
+                if request.GET.get('category'):
+                    blog_query2 = Post.objects.filter(
+                        Q(category__title__icontains=query2))
+                    blogs = blog_query & blog_query2
+                else:
+                    blogs = blog_query
+            elif request.GET.get('category'):
+                blog_query2 = Post.objects.filter(
+                    Q(category__title__icontains=query2))
+                if request.GET.get('q'):
+                    blog_query = Post.objects.filter(
+                        Q(title__icontains=query) | Q(content__icontains=query))
+                    blogs = blog_query & blog_query2
+                else:
+                    blogs = blog_query2
             context['category2'] = query2
             context['query'] = query
-        elif request.GET.get('q'):
-            query = request.GET.get('q')
+        elif request.GET.get('query_search'):
+            query = request.GET.get('query_search')
             caterory_search = 0
             context['category_search2'] = caterory_search
             context['query'] = query
@@ -153,3 +166,28 @@ def add_category(request):
                 form.save()
                 return(HttpResponseRedirect('/'))
         return(render(request, 'blog/add_category.html'))
+
+
+def ajax_search(request):
+    ctx = {}
+    url_parameter = request.GET.get("q")
+
+    if url_parameter:
+        ajax_blogs = Post.objects.filter(
+            Q(title__icontains=url_parameter) | Q(content__icontains=url_parameter))
+    else:
+        ajax_blogs = Post.objects.all()
+
+    ctx['ajax_blogs'] = ajax_blogs
+
+    if request.is_ajax():
+        html = render_to_string(
+            template_name="blog/ajax-blogs-data.html",
+            context={"ajax_blogs": ajax_blogs}
+        )
+
+        data_dict = {"html_from_view": html}
+
+        return JsonResponse(data=data_dict, safe=False)
+
+    return (render(request, "blog/ajax_search.html", context=ctx))
