@@ -23,14 +23,6 @@
             <div class=" col-md-8 col-md-10 mx-auto">
                 <div class="site-heading">
                     <h3 class="site-heading my-4 mt-3 text-white"> Welcome {{ request.user }}!!!  
-                        <form method="GET" action="{% url 'blog:home' %}">
-                            {% if category_search2 == 0 %}
-                                <input type='text' name='q' id='q' placeholder='{{ query }}' >
-                            {% else %}
-                                <input type='text' name='q' id='q' placeholder='Search...' >
-                            {% endif %}
-                            <button type='submit' class='btn btn-success'>Search</button>
-                        </form>
                     </h3>
                   
                     <label><a class="nav-link text-white font-weight-bold" href="category_list/">Add Category</a></label>

@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
 
@@ -8,6 +10,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
             crossorigin="anonymous" />
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     </head>
 
     <body>
@@ -45,6 +49,19 @@
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
                     {%if request.user.is_authenticated%}
+                        <li class="nav-item text-black">
+                            <form method="GET" action="{% url 'blog:home' %}">
+                            {% if category_search2 == 0 %}
+                                <input type='text' name='query_search' id='query_search' placeholder='{{ query }}' >
+                            {% else %}
+                                <input type='text' name='query_search' id='query_search' placeholder='Search...' >
+                            {% endif %}
+                            <button type='submit' class='btn btn-success'>Search</button>
+                        </form>
+                        </li>
+                        <li class="nav-item text-black">
+                            <a class="nav-link text-black font-weight-bold" href="/ajax_search">AJAX Search</a>
+                        </li>
                         <li class="nav-item text-black">
                             <a class="nav-link text-black font-weight-bold" href="/logout">Logout</a>
                         </li>

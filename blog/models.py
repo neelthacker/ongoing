@@ -12,8 +12,10 @@ def unique_slug():
 
 
 class Category(models.Model):
+    """ This model is for Category """
+    title = models.CharField(max_length=255, unique=True,
+                             verbose_name="Title for category")
 
-    title = models.CharField(max_length=255, verbose_name="Title")
     class Meta:
         verbose_name = "Category"
         verbose_name_plural = "Categories"
@@ -23,6 +25,7 @@ class Category(models.Model):
 
 
 class Post(models.Model):
+    """ This model is for Post """
     title = models.CharField('title for post', max_length=200)
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='blog_posts')
