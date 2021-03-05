@@ -20,7 +20,7 @@
 <form method="POST" action="{% url 'blog:delete' item.slug %}">
     {% csrf_token %}
     <a href="{% url 'blog:home' %}">Cancle</a>
-    <input type="submit" name="Confirm">
+    <input type="submit" name="Confirm" >
 
 </form>
 
