@@ -1,0 +1,15 @@
+{% if ajax_blogs %}
+  <ul>
+  {% for post in ajax_blogs %}
+  <div class="card mb-4">
+    <div class="card-body">
+        <h2 class="card-title">{{ post.title }}</h2>
+        <p class="card-text text-muted h6">{{ post.category }}</p>
+        <p class="card-text text-muted h6">{{ post.author }} | {{ post.created_on}} </p>
+        <p class="card-text">{{post.content|slice:":200" }}</p>
+</div>
+  {% endfor %}
+  </ul>
+{% else %}
+  <p>No artists found.</p>
+{% endif %}

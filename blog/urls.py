@@ -14,4 +14,5 @@ urlpatterns = [
     path(r'user_list/', views.user_list, name='user_list'),
     path(r'category_list/', views.add_category, name='category'),
     path(r'ajax_search/', views.ajax_search, name='ajax_search'),
+    path(r'ajax_category/', views.ajax_category, name='ajax_category'),
 ]
