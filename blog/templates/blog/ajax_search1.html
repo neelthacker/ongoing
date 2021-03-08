@@ -8,6 +8,8 @@
   <form method="get" enctype="multipart/form-data"> 
     <input type="text" id="user-input" placeholder="Search">
     <select name="category" id="category">
+      <option value="none" selected >Select any option </option> 
+     
     {% for i in category %}	
   	<option value="{{i.title}}">{{i.title}}</option>
     {% endfor %}

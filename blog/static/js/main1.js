@@ -13,9 +13,11 @@ var ajax = function(endpoint, search_parameters) {
             post_div.html(response['html_from_view'])
                
         })
-        .fail(function(){
-            alert('Oooops');
-})
+//         .fail(function(){
+//             alert('Oooops');
+// })
+}
+
 
 
 submit.on('click', function () {
