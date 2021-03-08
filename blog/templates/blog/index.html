@@ -38,7 +38,8 @@
                             {% if category_search == 0 %}
                                 <select name="category">
                                     <option value="{{ category2 }}" selected disabled hidden>{{ category2 }}</option>
-                                {% for i in data_category %}
+
+                                    {% for i in data_category %}
                                     {% if i != category2 %}
                                         <option value="{{ i.title }}">{{ i.title }}</option>
                                     {% endif %}
@@ -47,7 +48,7 @@
                                 <button type='submit' class='btn btn-success'>Search</button>
                             {% else %}
                                 <select name="category">
-                                    <option value="none" selected disabled hidden>Select any option </option> 
+                                    <option value="none" selected >Select any option </option> 
                                 {% for i in data_category %}
                                     <option value="{{ i.title }}">{{ i.title }}</option>
                                 {% endfor %}
