@@ -1,32 +1,32 @@
 var user_input = $("#user-input")
 var user_input1 = $("#category")
+var submit = $("#submit")
 var post_div = $('#replaceable-content')
 var endpoint = '/ajax_category/'
-var delay = 350
-var scheduled_function = 0
+delay = 350
+var scheduled_function = false
 
-var ajax = function (endpoint, search_parameters, search_parameters1) {
-    $.getJSON(endpoint, search_parameters, search_parameters1)
+var ajax = function(endpoint, search_parameters) {
+    $.getJSON(endpoint, search_parameters)
         .done(response => {
             
-                post_div.html(response['html_from_view'])
+            post_div.html(response['html_from_view'])
                
         })
-}
+        .fail(function(){
+            alert('Oooops');
+})
 
 
-user_input.on('keyup change', function () {
+submit.on('click', function () {
 
     var search_parameters = {
-        q: $(this).val() 
+        q: $(user_input).val(),
+        category : $(user_input1).val() 
     }
-    var search_parameters1 = {
-        q1: $(this).val() 
-    }
-
     if (scheduled_function) {
         clearTimeout(scheduled_function)
     }
 
-    scheduled_function = setTimeout(ajax, delay, endpoint, search_parameters, search_parameters1)
+    scheduled_function = setTimeout(ajax, delay, endpoint, search_parameters)
 })

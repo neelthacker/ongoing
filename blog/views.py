@@ -194,33 +194,27 @@ def ajax_search(request):
 
     return (render(request, "blog/ajax_search.html", context=ctx))
 
+
 def ajax_category(request):
     ctx = {}
     category = Category.objects.all()
     ctx['category'] = category
+    # import pdb;pdb.set_trace()
     url_parameter = request.GET.get("q")
-    url_parameter1 = request.GET.get("q1")
+    url_parameter1 = request.GET.get("category")
 
-    if url_parameter:
-        if url_parameter1:  
-            ajax_category = Post.objects.filter(
-                Q(category__title__icontains=url_parameter))
-            ajax_search = Post.objects.filter(
+    if url_parameter and url_parameter1:
+        ajax_category = Post.objects.filter(
+            Q(category__title__icontains=url_parameter1))
+        ajax_search = Post.objects.filter(
             Q(title__icontains=url_parameter) | Q(content__icontains=url_parameter))
-            ajax_blogs = ajax_search & ajax_category
-        else:
-            ajax_blogs = Post.objects.filter(
+        ajax_blogs = ajax_search & ajax_category
+    elif url_parameter:
+        ajax_blogs = Post.objects.filter(
             Q(title__icontains=url_parameter) | Q(content__icontains=url_parameter))
     elif url_parameter1:
-        if url_parameter:
-            ajax_category = Post.objects.filter(
-                Q(category__title__icontains=url_parameter))
-            ajax_search = Post.objects.filter(
-                Q(title__icontains=url_parameter) | Q(content__icontains=url_parameter))
-            ajax_blogs = ajax_search & ajax_category
-        else:
-            ajax_blogs = Post.objects.filter(
-                Q(category__title__icontains=url_parameter))
+        ajax_blogs = Post.objects.filter(
+            Q(category__title__icontains=url_parameter1))
     else:
         ajax_blogs = Post.objects.all()
 

@@ -5,14 +5,18 @@
 <center><h3>Blogs</h3></center>
 
 <div class="col-6 align-left">
-  <input type="text" id="user-input" placeholder="Search">
-  <select name="category" id="category">
-  {% for i in category %}	
+  <form method="get" enctype="multipart/form-data"> 
+    <input type="text" id="user-input" placeholder="Search">
+    <select name="category" id="category">
+    {% for i in category %}	
   	<option value="{{i.title}}">{{i.title}}</option>
-  {% endfor %}
-</select>
+    {% endfor %}
+  </select>
+    <input type="button" id='submit' value="submit" name="Submit">
+    </form>
+  
 </div><br>
-<div class="container">
+<!-- <div class="container"> -->
   <!-- <div class="row">
     <div class="col-md-8 card mb-4  mt-3 left  top"> -->
       <div class="card-body">
@@ -20,7 +24,18 @@
   
 
   <div id="replaceable-content" class="col-6">
+    <div class="container">
+      <div class="row">
+          <!-- Blog Entries Column -->
+          <div class="col-md-8 mt-3 left">
+            <div class="card mb-4">
+              <div class="card-body">
     {% include 'blog/ajax-blogs-data1.html' %}
+  </div>
+</div>
+</div>
+</div>
+</div>
   </div><br>
 
 </div></div>
