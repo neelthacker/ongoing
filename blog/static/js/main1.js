@@ -20,7 +20,7 @@ var ajax = function(endpoint, search_parameters) {
 
 
 
-submit.on('click', function () {
+submit.on('click keyup', function () {
 
     var search_parameters = {
         q: $(user_input).val(),

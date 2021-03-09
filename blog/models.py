@@ -2,13 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 import django
+
 from datetime import datetime
 
-
+# Created custom slug using combination of second and millisecond and use slug as unique key 
 def unique_slug():
     value = datetime.now().strftime("%S%f")
     return value
-# Create your models here.
 
 
 class Category(models.Model):
@@ -45,7 +45,7 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
-
+    
     def save(self, *args, **kwargs):
         self.slug = unique_slug()
         super(Post, self).save(*args, **kwargs)

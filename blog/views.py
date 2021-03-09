@@ -1,15 +1,16 @@
-from blog.models import Post, Category
-from blog.forms import CreatePost, SignUpForm, CategoryForm
-
-from django.contrib.auth.forms import AuthenticationForm
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import JsonResponse
-from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db.models import Q
+from django.http import JsonResponse
+from django.shortcuts import HttpResponseRedirect, get_object_or_404, render
 from django.template.loader import render_to_string
-from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
+
+from blog.forms import CategoryForm, CreatePost, SignUpForm
+from blog.models import Category, Post
 
 
+# In this function their is all blogs, user blogs, search with content, title and category
 def post_list(request):
     if request.user.is_authenticated:
         context = {}
@@ -65,11 +66,13 @@ def post_list(request):
         return(HttpResponseRedirect('/login/'))
 
 
+# In this function the detail information of post is shown and slug is used as unique key for post
 def post_detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
     return render(request, 'blog/post_detail.html', {'data': post})
 
 
+# In this function blogs will be created and slug will be add from model in the blogs
 def create_post(request):
     if not request.user.is_authenticated:
         return(HttpResponseRedirect('/'))
@@ -88,6 +91,7 @@ def create_post(request):
         return (render(request, 'blog/create.html', {'form': form, 'update': update}))
 
 
+# Signup function by using inbuild method and added some extra fields
 def sign_up(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
@@ -99,6 +103,7 @@ def sign_up(request):
     return(render(request, 'blog/signup.html', {'form': form}))
 
 
+# Login function or user authenticate
 def log_in(request):
     if not request.user.is_authenticated:
         if request.method == 'POST':
@@ -117,11 +122,13 @@ def log_in(request):
         return(HttpResponseRedirect('/'))
 
 
+# Logout function
 def log_out(request):
     logout(request)
     return(HttpResponseRedirect('/login/'))
 
 
+# Update Function and obj update is noting much just to check the request is update post or create post at html page
 def update_post(request, slug):
     order = Post.objects.get(slug=slug)
     form = CreatePost(instance=order)
@@ -134,6 +141,7 @@ def update_post(request, slug):
     return(render(request, 'blog/create.html', {'form': form, 'update': update}))
 
 
+# Delete blog function
 def delete_post(request, slug):
     order = Post.objects.get(slug=slug)
     if request.method == "POST":
@@ -142,6 +150,7 @@ def delete_post(request, slug):
     return(render(request, 'blog/delete.html', {'item': order}))
 
 
+# In this function it will show list of blogs uploaded by current login user
 def user_list(request):
     if request.user.is_authenticated:
         data = Post.objects.filter(author=request.user).order_by('-created_on')
@@ -158,6 +167,7 @@ def user_list(request):
         return(HttpResponseRedirect('/login/'))
 
 
+# In this function it will add category
 def add_category(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
@@ -168,10 +178,9 @@ def add_category(request):
         return(render(request, 'blog/add_category.html'))
 
 
+# Search blogs by using ajax
 def ajax_search(request):
     ctx = {}
-    # category = Category.objects.all()
-    # ctx['category'] = category
     url_parameter = request.GET.get("q")
 
     if url_parameter:
@@ -195,11 +204,11 @@ def ajax_search(request):
     return (render(request, "blog/ajax_search.html", context=ctx))
 
 
+# Search blogs by content, title and category by using AJAX
 def ajax_category(request):
     ctx = {}
     category = Category.objects.all()
     ctx['category'] = category
-    # import pdb;pdb.set_trace()
     url_parameter = request.GET.get("q")
     url_parameter1 = request.GET.get("category")
 

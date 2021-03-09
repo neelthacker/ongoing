@@ -6,24 +6,27 @@
 
 <div class="col-6 align-left">
   <input type="text" id="user-input" placeholder="Search">
-  <!-- <select name="category" id="category">
-  {% for i in category %}	
-  	<option value="{{i.title}}">{{i.title}}</option>
-  {% endfor %}
-</select> -->
+  
 </div><br>
-<div class="container">
-  <!-- <div class="row">
-    <div class="col-md-8 card mb-4  mt-3 left  top"> -->
-      <div class="card-body">
+<div class="card-body">
  
   
 
   <div id="replaceable-content" class="col-6">
+    <div class="container">
+      <div class="row">
+          <!-- Blog Entries Column -->
+          <div class="col-md-8 mt-3 left">
+            <div class="card mb-4">
+              <div class="card-body">
     {% include 'blog/ajax-blogs-data.html' %}
+  </div>
+</div>
+</div>
+</div>
+</div>
   </div><br>
-
-</div></div>
+</div>
 <!-- </div></div>             -->
 <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
 
