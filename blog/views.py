@@ -3,7 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.http import JsonResponse
-from django.shortcuts import HttpResponseRedirect, get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.template.loader import render_to_string
 
 from blog.forms import CategoryForm, CreatePost, SignUpForm
@@ -63,7 +63,7 @@ def post_list(request):
         context['blogs'] = blogs
         return (render(request, 'blog/index.html', context))
     else:
-        return(HttpResponseRedirect('/login/'))
+        return redirect("blog:login")
 
 
 # In this function the detail information of post is shown and slug is used as unique key for post
@@ -75,16 +75,16 @@ def post_detail(request, slug):
 # In this function blogs will be created and slug will be add from model in the blogs
 def create_post(request):
     if not request.user.is_authenticated:
-        return(HttpResponseRedirect('/'))
+        return redirect("blog:home")
     else:
-        form = CreatePost(request.POST or None)
+        form = CreatePost(request.POST)
         update = 0
         if request.method == 'POST':
             if form.is_valid():
                 f = form.save(commit=False)
                 f.author = request.user
                 f.save()
-            return(HttpResponseRedirect('/'))
+            return redirect("blog:home")
         else:
             form = CreatePost()
 
@@ -97,7 +97,7 @@ def sign_up(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/')
+            return redirect("blog:home")
     else:
         form = SignUpForm()
     return(render(request, 'blog/signup.html', {'form': form}))
@@ -112,20 +112,20 @@ def log_in(request):
                 uname = fm.cleaned_data['username']
                 upass = fm.cleaned_data['password']
                 user = authenticate(username=uname, password=upass)
-                if user is not None:
+                if user:
                     login(request, user)
-                    return HttpResponseRedirect('/')
+                    return redirect("blog:home")
         else:
             fm = AuthenticationForm()
         return(render(request, 'blog/login.html', {'form': fm}))
     else:
-        return(HttpResponseRedirect('/'))
+        return redirect("blog:home")
 
 
 # Logout function
 def log_out(request):
     logout(request)
-    return(HttpResponseRedirect('/login/'))
+    return redirect('blog:login')
 
 
 # Update Function and obj update is noting much just to check the request is update post or create post at html page
@@ -137,7 +137,7 @@ def update_post(request, slug):
         form = CreatePost(request.POST, instance=order)
         if form.is_valid():
             form.save()
-            return(HttpResponseRedirect('/'))
+            return redirect("blog:home")
     return(render(request, 'blog/create.html', {'form': form, 'update': update}))
 
 
@@ -146,7 +146,7 @@ def delete_post(request, slug):
     order = Post.objects.get(slug=slug)
     if request.method == "POST":
         order.delete()
-        return(HttpResponseRedirect('/'))
+        return redirect('blog:home')
     return(render(request, 'blog/delete.html', {'item': order}))
 
 
@@ -164,8 +164,7 @@ def user_list(request):
             blogs = paginator.page(paginator.num_pages)
         return (render(request, 'blog/user_list.html', {'data': blogs, 'name': request.user}))
     else:
-        return(HttpResponseRedirect('/login/'))
-
+        return redirect('blog:login')
 
 # In this function it will add category
 def add_category(request):
@@ -174,7 +173,7 @@ def add_category(request):
             form = CategoryForm(request.POST)
             if form.is_valid():
                 form.save()
-                return(HttpResponseRedirect('/'))
+                return redirect("blog:home")
         return(render(request, 'blog/add_category.html'))
 
 
