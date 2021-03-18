@@ -61,7 +61,7 @@ def post_list(request):
         except EmptyPage:
             blogs = paginator.page(paginator.num_pages)
         context['blogs'] = blogs
-        return (render(request, 'blog/index.html', context))
+        return render(request, 'blog/index.html', context)
     else:
         return redirect("blog:login")
 
@@ -88,7 +88,7 @@ def create_post(request):
         else:
             form = CreatePost()
 
-        return (render(request, 'blog/create.html', {'form': form, 'update': update}))
+        return render(request, 'blog/create.html', {'form': form, 'update': update})
 
 
 # Signup function by using inbuild method and added some extra fields
@@ -100,7 +100,7 @@ def sign_up(request):
             return redirect("blog:home")
     else:
         form = SignUpForm()
-    return(render(request, 'blog/signup.html', {'form': form}))
+    return render(request, 'blog/signup.html', {'form': form})
 
 
 # Login function or user authenticate
@@ -138,7 +138,7 @@ def update_post(request, slug):
         if form.is_valid():
             form.save()
             return redirect("blog:home")
-    return(render(request, 'blog/create.html', {'form': form, 'update': update}))
+    return render(request, 'blog/create.html', {'form': form, 'update': update})
 
 
 # Delete blog function
@@ -147,7 +147,7 @@ def delete_post(request, slug):
     if request.method == "POST":
         order.delete()
         return redirect('blog:home')
-    return(render(request, 'blog/delete.html', {'item': order}))
+    return render(request, 'blog/delete.html', {'item': order})
 
 
 # In this function it will show list of blogs uploaded by current login user
@@ -162,7 +162,7 @@ def user_list(request):
             blogs = paginator.page(1)
         except EmptyPage:
             blogs = paginator.page(paginator.num_pages)
-        return (render(request, 'blog/user_list.html', {'data': blogs, 'name': request.user}))
+        return render(request, 'blog/user_list.html', {'data': blogs, 'name': request.user})
     else:
         return redirect('blog:login')
 
@@ -174,7 +174,7 @@ def add_category(request):
             if form.is_valid():
                 form.save()
                 return redirect("blog:home")
-        return(render(request, 'blog/add_category.html'))
+        return render(request, 'blog/add_category.html')
 
 
 # Search blogs by using ajax
@@ -200,7 +200,7 @@ def ajax_search(request):
 
         return JsonResponse(data=data_dict)
 
-    return (render(request, "blog/ajax_search.html", context=ctx))
+    return render(request, "blog/ajax_search.html", context=ctx)
 
 
 # Search blogs by content, title and category by using AJAX
@@ -238,4 +238,4 @@ def ajax_category(request):
 
         return JsonResponse(data=data_dict)
 
-    return (render(request, "blog/ajax_search1.html", context=ctx))
+    return render(request, "blog/ajax_search1.html", context=ctx)
