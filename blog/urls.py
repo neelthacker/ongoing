@@ -4,9 +4,9 @@ from . import views
 app_name = 'blog'
 urlpatterns = [ 
     path(r'', views.post_list, name='home'),
-    path(r'<slug:slug>/$', views.post_detail, name='post_detail'),
+    path(r'<slug:slug>/<int:page>', views.post_detail, name='post_detail'),
     path(r'createpost/', views.create_post, name='create'),
-    path(r'updatepost/<slug:slug>/$', views.update_post, name='update'),
+    path(r'updatepost/<slug:slug>/<int:page>', views.update_post, name='update'),
     path(r'delete/<slug:slug>/$', views.delete_post, name='delete'),
     path(r'login/', views.log_in, name='login'),
     path(r'signup/', views.sign_up, name='signup'),

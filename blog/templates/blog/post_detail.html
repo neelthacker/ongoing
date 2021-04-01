@@ -24,7 +24,7 @@
         <p class=" text-muted">{{ data.author }} | {{ data.created_on }}</p>
         <p class="card-text ">{{ data.content | safe }}</p>
         {% if request.user == data.author %}
-        <a class="btn btn-warning" href="{% url 'blog:update' data.slug  %}">Update</a>
+        <a class="btn btn-warning" href="{% url 'blog:update' page=page_no slug=data.slug  %}">Update</a>
         <a class="btn btn-danger" href="{% url 'blog:delete' data.slug  %}">Delete</a>
         {% endif %} 
        

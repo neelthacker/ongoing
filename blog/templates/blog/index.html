@@ -74,9 +74,9 @@
                         <p class="card-text text-muted h6">{{ post.category }}</p>
                         <p class="card-text text-muted h6">{{ post.author }} | {{ post.created_on}} </p>
                         <p class="card-text">{{post.content|slice:":200" }}</p>
-                        {%if post.slug%}
-                        <a href="{% url 'blog:post_detail' post.slug  %}" class="btn btn-primary">Read More &rarr;</a>
-                        {%endif%}
+                        <!-- {%if post.slug%} -->
+                        <a href="{% url 'blog:post_detail' page=blogs.number slug=post.slug  %}" class="btn btn-primary">Read More &rarr;</a>
+                        <!-- {%endif%} -->
                     </div>
                 </div>
                 {% endfor %}

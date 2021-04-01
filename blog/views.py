@@ -3,7 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, render, redirect, HttpResponseRedirect
 from django.template.loader import render_to_string
 
 from blog.forms import CategoryForm, CreatePost, SignUpForm
@@ -67,9 +67,10 @@ def post_list(request):
 
 
 # In this function the detail information of post is shown and slug is used as unique key for post
-def post_detail(request, slug):
+def post_detail(request, slug, page):
     post = get_object_or_404(Post, slug=slug)
-    return render(request, 'blog/post_detail.html', {'data': post})
+    context = {'data':post, 'page_no':page}
+    return render(request, 'blog/post_detail.html', context)
 
 
 # In this function blogs will be created and slug will be add from model in the blogs
@@ -129,7 +130,7 @@ def log_out(request):
 
 
 # Update Function and obj update is noting much just to check the request is update post or create post at html page
-def update_post(request, slug):
+def update_post(request, slug, page):
     order = Post.objects.get(slug=slug)
     form = CreatePost(instance=order)
     update = 1
@@ -137,7 +138,7 @@ def update_post(request, slug):
         form = CreatePost(request.POST, instance=order)
         if form.is_valid():
             form.save()
-            return redirect("blog:home")
+            return HttpResponseRedirect('/?page='+str(page))
     return render(request, 'blog/create.html', {'form': form, 'update': update})
 
 
