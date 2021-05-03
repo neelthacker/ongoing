@@ -34,7 +34,7 @@ class Post(models.Model):
     category = models.ForeignKey(
         Category, verbose_name="Category", on_delete=models.CASCADE, blank=True, null=True)
     created_on = models.DateTimeField(
-        editable=True, auto_now_add=False, default=django.utils.timezone.now())
+        editable=True, auto_now_add=False, default=django.utils.timezone.now)
     slug = models.CharField(max_length=200, unique=True)
 
     class Meta:
@@ -49,3 +49,17 @@ class Post(models.Model):
     def save(self, *args, **kwargs):
         self.slug = unique_slug()
         super(Post, self).save(*args, **kwargs)
+
+class Comments(models.Model):
+    post = models.ForeignKey(
+        Post, related_name="comments", on_delete=models.CASCADE)
+    text = models.TextField()
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='commentAuther')
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.post.slug
+
+
+     

@@ -1,0 +1,20 @@
+{% extends 'blog/base.html' %} {% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 card mb-4  mt-3 left  top">
+      <div class="card-body">
+    
+          <h1> Write Your Comment </h1>
+          <p class=" text-muted">
+              <form method="post" enctype="multipart/form-data"> 
+              {% csrf_token %} 
+              <p>Title       : {{form.text}}</p> 
+              <input type="submit" >
+              </form>
+          </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

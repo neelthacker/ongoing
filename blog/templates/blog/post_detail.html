@@ -25,10 +25,22 @@
         <p class="card-text ">{{ data.content | safe }}</p>
         {% if request.user == data.author %}
         <a class="btn btn-warning" href="{% url 'blog:update' page=page_no slug=data.slug  %}">Update</a>
-        <a class="btn btn-danger" href="{% url 'blog:delete' data.slug  %}">Delete</a>
-        {% endif %} 
-       
-      </div>
+        <a class="btn btn-danger" href="{% url 'blog:delete' slug=data.slug  %}">Delete</a>
+        {% endif %}
+        <br>
+        <br>
+        
+        
+        <a class="nav-link text-black font-weight-bold"href="{% url 'blog:comment' slug=data.slug  %}">Add Comment</a>
+             </div>
+        {% if comment %}
+          {% for i in comment %}
+          <p class=" text-muted">{{ i.author }} | {{ i.created }}</p>
+          <p class="card-text ">{{ i.text | safe }}</p>
+          {% endfor %}
+        {% else %}
+          No Comments!!!!!!!!!1
+        {% endif %}
     </div>
   </div>
 </div>

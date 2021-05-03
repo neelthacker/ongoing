@@ -6,8 +6,8 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect, HttpResponseRedirect
 from django.template.loader import render_to_string
 
-from blog.forms import CategoryForm, CreatePost, SignUpForm
-from blog.models import Category, Post
+from blog.forms import CategoryForm, CreatePost, SignUpForm, CommentForm
+from blog.models import Category, Post, Comments
 
 
 # In this function their is all blogs, user blogs, search with content, title and category
@@ -69,7 +69,8 @@ def post_list(request):
 # In this function the detail information of post is shown and slug is used as unique key for post
 def post_detail(request, slug, page):
     post = get_object_or_404(Post, slug=slug)
-    context = {'data':post, 'page_no':page}
+    comment = Comments.objects.filter(post__slug=slug).order_by('-created')
+    context = {'data':post, 'page_no':page, 'comment':comment}
     return render(request, 'blog/post_detail.html', context)
 
 
@@ -240,3 +241,17 @@ def ajax_category(request):
         return JsonResponse(data=data_dict)
 
     return render(request, "blog/ajax_search1.html", context=ctx)
+
+
+def comment(request, slug):
+    
+    form = CommentForm(request.POST)
+    if request.method == 'POST':
+        if form.is_valid():
+            f = form.save(commit=False)
+            f.author = request.user
+            f.post = Post.objects.filter(slug=slug).first()
+            f.save()
+            return redirect("blog:home")
+    else:
+        return render(request, 'blog/comments.html', {'form': form})
