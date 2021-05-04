@@ -149,6 +149,7 @@ def delete_post(request, slug):
     if request.method == "POST":
         order.delete()
         return redirect('blog:home')
+    
     return render(request, 'blog/delete.html', {'item': order})
 
 
@@ -244,7 +245,7 @@ def ajax_category(request):
 
 
 def comment(request, slug):
-    
+
     form = CommentForm(request.POST)
     if request.method == 'POST':
         if form.is_valid():
@@ -255,3 +256,11 @@ def comment(request, slug):
             return redirect("blog:home")
     else:
         return render(request, 'blog/comments.html', {'form': form})
+
+def comment_delete(request, pk):
+    
+    order = Comments.objects.get(pk=pk)
+    if request.method == "POST":
+        order.delete()
+        return redirect('blog:home')
+    return render(request, 'blog/comment_delete.html', {'item': order})

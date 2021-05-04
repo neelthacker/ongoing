@@ -52,14 +52,14 @@ class Post(models.Model):
 
 class Comments(models.Model):
     post = models.ForeignKey(
-        Post, related_name="comments", on_delete=models.CASCADE)
+        Post, related_name="comments", on_delete=models.CASCADE)    
     text = models.TextField()
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='commentAuther')
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.post.slug
+        return self.post
 
 
      

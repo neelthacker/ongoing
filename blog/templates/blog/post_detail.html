@@ -29,17 +29,20 @@
         {% endif %}
         <br>
         <br>
-        
-        
         <a class="nav-link text-black font-weight-bold"href="{% url 'blog:comment' slug=data.slug  %}">Add Comment</a>
              </div>
         {% if comment %}
-          {% for i in comment %}
-          <p class=" text-muted">{{ i.author }} | {{ i.created }}</p>
-          <p class="card-text ">{{ i.text | safe }}</p>
-          {% endfor %}
+          
+            {% for i in comment %}
+            <p class=" text-muted">{{ i.author }} | {{ i.created }}</p>
+            <p class="card-text ">{{ i.text | safe }}</p>
+            {% if request.user == i.author %}
+            <a class="btn btn-danger" href="{% url 'blog:comment_delete' pk=i.pk  %}">Delete</a>
+            {% endif %}
+            {% endfor %}
+            
         {% else %}
-          No Comments!!!!!!!!!1
+          No Comments!!!!!!!!!
         {% endif %}
     </div>
   </div>
