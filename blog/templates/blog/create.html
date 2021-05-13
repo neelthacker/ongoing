@@ -11,9 +11,8 @@
           <p class=" text-muted">
               <form method="post" enctype="multipart/form-data"> 
               {% csrf_token %} 
-              <p>Title       : {{form.title}}</p>
-              <p>Category    : {{form.category}}</p>
-              <p>Description : {{form.content}}</p> 
+              {{from.media}}
+              {{form.as_p}}
               <input type="submit" >
               </form>
           </p>

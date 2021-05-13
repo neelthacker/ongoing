@@ -1,6 +1,10 @@
 from django.contrib import admin
 from django.urls import path
 from . import views
+
+from django.conf import settings
+from django.conf.urls.static import static
+
 app_name = 'blog'
 urlpatterns = [ 
     path(r'', views.post_list, name='home'),
@@ -17,4 +21,6 @@ urlpatterns = [
     path(r'ajax_category/', views.ajax_category, name='ajax_category'),
     path(r'<slug:slug>/comment', views.comment, name='comment'),
     path(r'comment_delete/<int:pk>/', views.comment_delete, name='comment_delete'),
-]
+    # path('blogpost-like/<int:pk>', views.post_detail, name="blogpost_like"),
+
+] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

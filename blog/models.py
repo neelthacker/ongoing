@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.core.validators import MaxValueValidator, MinValueValidator 
 import django
 
 from datetime import datetime
@@ -29,6 +30,7 @@ class Post(models.Model):
     title = models.CharField('title for post', max_length=200)
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='blog_posts')
+    image = models.ImageField(null=True, blank=True, upload_to="images/")
     updated_on = models.DateTimeField(auto_now=True)
     content = models.TextField()
     category = models.ForeignKey(
@@ -36,6 +38,7 @@ class Post(models.Model):
     created_on = models.DateTimeField(
         editable=True, auto_now_add=False, default=django.utils.timezone.now)
     slug = models.CharField(max_length=200, unique=True)
+    # likes = models.ManyToManyField(User, related_name='blogpost_like')
 
     class Meta:
         ordering = ['-created_on']
@@ -50,16 +53,28 @@ class Post(models.Model):
         self.slug = unique_slug()
         super(Post, self).save(*args, **kwargs)
 
+    def number_of_likes(self):
+        return self.likes.count()
+
+   
+
 class Comments(models.Model):
     post = models.ForeignKey(
         Post, related_name="comments", on_delete=models.CASCADE)    
-    text = models.TextField()
+    text = models.CharField(max_length=300)
+    score = models.IntegerField(default=1,
+            validators=[
+                MaxValueValidator(5),
+                MinValueValidator(0),
+            ]
+         )
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='commentAuther')
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.post
+
 
 
      

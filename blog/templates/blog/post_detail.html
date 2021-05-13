@@ -22,7 +22,23 @@
       <div class="card-body">
         <h1>{% block title %} {{ data.title }} {% endblock title %}</h1>
         <p class=" text-muted">{{ data.author }} | {{ data.created_on }}</p>
-        <p class="card-text ">{{ data.content | safe }}</p>
+        {% if data.image %}
+          <img src="{{data.image.url}}" class="rounded" width="50%">
+          <br>
+          <br>
+        {% endif %}
+          <p class="card-text ">{{ data.content | safe }}</p>
+        <!-- <form method="POST">
+          {% csrf_token %}
+      
+          {% if data.likes.count %}
+          <button type="submit" name="blogpost_id" value="{{object.id}}" class="btn btn-info">Unlike</button>
+          {% else %}
+          <button type="submit" name="blogpost_id" value="{{object.id}}" class="btn btn-info">Like</button>
+          {% endif %}
+        </form>
+        <strong class="text-secondary">{{ counter }} Like{{ counter|pluralize }}</strong> -->
+        
         {% if request.user == data.author %}
         <a class="btn btn-warning" href="{% url 'blog:update' page=page_no slug=data.slug  %}">Update</a>
         <a class="btn btn-danger" href="{% url 'blog:delete' slug=data.slug  %}">Delete</a>
@@ -30,22 +46,40 @@
         <br>
         <br>
         <a class="nav-link text-black font-weight-bold"href="{% url 'blog:comment' slug=data.slug  %}">Add Comment</a>
-             </div>
+             
+            
         {% if comment %}
-          
+        
             {% for i in comment %}
+            
             <p class=" text-muted">{{ i.author }} | {{ i.created }}</p>
+            <span class="fa fa-star {%if i.score >= 1 %}checked {% else %} unchecked {% endif %} "></span>
+            <span class="fa fa-star {%if i.score >= 2 %}checked {% else %} unchecked {% endif %}"></span>
+            <span class="fa fa-star {%if i.score >= 3 %}checked {% else %} unchecked {% endif %}"></span>
+            <span class="fa fa-star {%if i.score >= 4 %}checked {% else %} unchecked {% endif %}"></span>
+            <span class="fa fa-star {%if i.score >= 5 %}checked {% else %} unchecked {% endif %}"></span>
+            
+            <!-- <p class=" text-muted">{{ i.score }}</p> -->
             <p class="card-text ">{{ i.text | safe }}</p>
             {% if request.user == i.author %}
-            <a class="btn btn-danger" href="{% url 'blog:comment_delete' pk=i.pk  %}">Delete</a>
+            <a class="btn btn-danger" href="{% url 'blog:comment_delete' pk=i.pk  %}">Delete</a><br><br>
             {% endif %}
+          
             {% endfor %}
-            
+           
         {% else %}
           No Comments!!!!!!!!!
         {% endif %}
+      </div>
+      </div>
     </div>
   </div>
-</div>
+<style>
+  
+.checked {
+  color: orange;
+}
 
+
+</style>
 {% endblock content %}

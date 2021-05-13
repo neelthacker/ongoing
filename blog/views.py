@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect, HttpResponseRedirect
 from django.template.loader import render_to_string
+from django.views.generic import RedirectView, DetailView
 
 from blog.forms import CategoryForm, CreatePost, SignUpForm, CommentForm
 from blog.models import Category, Post, Comments
@@ -68,9 +69,17 @@ def post_list(request):
 
 # In this function the detail information of post is shown and slug is used as unique key for post
 def post_detail(request, slug, page):
+    url = request.META.get('HTTP_REFERER')
     post = get_object_or_404(Post, slug=slug)
     comment = Comments.objects.filter(post__slug=slug).order_by('-created')
-    context = {'data':post, 'page_no':page, 'comment':comment}
+    # if post.likes.filter(id=request.user.id).exists():
+    #     post.likes.remove(request.user)
+    #     if counter > 0:
+    #         counter-=1
+    # else:
+    #     post.likes.add(request.user)
+    #     counter+=1
+    context = {'data':post, 'page_no':page, 'comment':comment,}
     return render(request, 'blog/post_detail.html', context)
 
 
@@ -136,6 +145,7 @@ def update_post(request, slug, page):
     form = CreatePost(instance=order)
     update = 1
     if request.method == 'POST':
+        
         form = CreatePost(request.POST, instance=order)
         if form.is_valid():
             form.save()
@@ -245,17 +255,20 @@ def ajax_category(request):
 
 
 def comment(request, slug):
-
+    # url = request.META.get('HTTP_REFERER')
     form = CommentForm(request.POST)
+    post = Post.objects.get(slug=slug)
     if request.method == 'POST':
         if form.is_valid():
+            data = Comments()
             f = form.save(commit=False)
             f.author = request.user
             f.post = Post.objects.filter(slug=slug).first()
+            data.score = form.cleaned_data['score']
             f.save()
-            return redirect("blog:home")
+            return redirect('blog:home')
     else:
-        return render(request, 'blog/comments.html', {'form': form})
+        return render(request, 'blog/comments.html', {'form': form,'data':post})
 
 def comment_delete(request, pk):
     
@@ -264,3 +277,25 @@ def comment_delete(request, pk):
         order.delete()
         return redirect('blog:home')
     return render(request, 'blog/comment_delete.html', {'item': order})
+
+
+# class BlogPostDetailView(DetailView):
+#     model = Post
+#     # template_name = MainApp/BlogPost_detail.html
+#     # context_object_name = 'object'
+
+#     def get_context_data(self, **kwargs):
+#         data = super().get_context_data(**kwargs)
+
+#         likes_connected = get_object_or_404(Post, id=self.kwargs['pk'])
+#         liked = False
+#         if likes_connected.likes.filter(id=self.request.user.id).exists():
+#             liked = True
+#         data['number_of_likes'] = likes_connected.number_of_likes()
+#         data['post_is_liked'] = liked
+#         return data
+
+
+
+
+    

@@ -26,3 +26,4 @@ user_input.on('keyup', function () {
 
     scheduled_function = setTimeout(ajax, delay, endpoint, search_parameters)
 })
+
