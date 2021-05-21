@@ -1,0 +1,55 @@
+{% extends 'blog/base.html' %} {% block content %}
+{% load static %}
+<style>
+    body {
+        font-family: "Roboto", sans-serif;
+        font-size: 18px;
+        background-color: #fdfdfd;
+    }
+    
+    .head_text {
+        color: white;
+    }
+    
+    .card {
+        box-shadow: 0 16px 48px #E3E7EB;
+    }
+</style>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 card mb-4  mt-3 left  top">
+      <div class="card-body">
+    
+          <h1> Write Your Feedback for this website </h1>
+
+          <p class=" text-muted">
+              <form method="post" action="" enctype="multipart/form-data"> 
+              {% csrf_token %} 
+              <p>Feedback       : {{form.text}}</p> 
+              <input type="submit" >
+              </form>
+          </p>
+          <hr>
+          {% if data %}
+        
+          {% for i in data %}
+          
+          <p class=" text-muted">{{ i.author }} | {{ i.created }}</p>
+          <p class="card-text ">{{ i.text | safe }}</p>
+          {% if request.user == i.author %}
+          <a class="btn btn-warning" href="{% url 'feedback:feedback_update' pk=i.pk  %}">Update</a><br><br>
+          
+          {% endif %}
+          <hr>
+          {% endfor %}
+         
+      {% else %}
+        No Feedbacks!!!!!!!!!
+      {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,30 @@
+{% extends 'blog/base.html' %} 
+{% block content %}
+<style>
+    body {
+        font-family: "Roboto", sans-serif;
+        font-size: 18px;
+        background-color: #fdfdfd;
+    }
+    
+    .head_text {
+        color: white;
+    }
+    
+    .card {
+        box-shadow: 0 16px 48px #E3E7EB;
+    }
+</style>
+
+<p>Are you sure you want to update your feedback</p>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p>Feedback       : {{form.text}}</p> 
+    <a href="{% url 'feedback:feedback' %}">Cancle</a>
+    <input type="submit" name="Confirm" >
+
+</form>
+
+
+
+{% endblock content %}

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog.apps.BlogConfig',
+    'feedback',
 ]
 
 MIDDLEWARE = [
@@ -128,3 +129,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATICFILES_DIRS = [BASE_DIR / 'static']
     
+
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = '587'
+# EMAIL_HOST_USER = 'neel.thacker@drcsystems.in'
+# EMAIL_HOST_PASSWORD = ''  #YOUR GMAIL PASSWORD
+# EMAIL_USE_TLS = False
