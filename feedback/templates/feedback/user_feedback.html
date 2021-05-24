@@ -38,7 +38,7 @@
           <p class=" text-muted">{{ i.author }} | {{ i.created }}</p>
           <p class="card-text ">{{ i.text | safe }}</p>
           {% if request.user == i.author %}
-          <a class="btn btn-warning" href="{% url 'feedback:feedback_update' pk=i.pk  %}">Update</a><br><br>
+          <a class="btn btn-warning" href="{% url 'feedback:feedback_update' pk=i.pk  %}">Edit</a><br><br>
           
           {% endif %}
           <hr>

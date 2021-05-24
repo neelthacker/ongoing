@@ -1,0 +1,57 @@
+{% extends 'blog/base.html' %} {% block content %}
+{% load static %}
+<style>
+    body {
+        font-family: "Roboto", sans-serif;
+        font-size: 18px;
+        background-color: #fdfdfd;
+    }
+    
+    .head_text {
+        color: white;
+    }
+    
+    .card {
+        box-shadow: 0 16px 48px #E3E7EB;
+    }
+    
+</style>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 card mb-4  mt-3 left  top">
+      <div class="card-body">
+    
+          <h1> Admin rules (dictatorship)</h1>
+            <br><br>
+          {% if data %}
+          <table style="width:100%">
+          <tr>
+            <th style='text-align: left;'>Name</th>
+            <th style='text-align: center;'>Feedback</th> 
+            <th style='text-align: right;'>Permissiom</th>
+          </tr>
+        
+          {% for i in data %}
+            <tr>
+              <td style='text-align: left;'><p class=" text-muted">{{ i.author }} </p></td>
+              <td style='text-align: center;'><p class="card-text ">{{ i.text | safe }}</p></td>
+              <td style='text-align: right;'>{% if i.permission == True %}
+                <a class="btn btn-danger" href="{% url 'feedback:admin_permission1' pk=i.pk  %}">revoke permission</a><br><br>
+              {% else %}
+              <a class="btn btn-warning" href="{% url 'feedback:admin_permission1' pk=i.pk  %}">grant permission</a><br><br>
+              {% endif %}
+              </td>
+            </tr>
+            
+          {% endfor %}
+        </table>
+      {% else %}
+        No Feedbacks!!!!!!!!!
+      {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

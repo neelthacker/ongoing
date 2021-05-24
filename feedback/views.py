@@ -29,6 +29,7 @@ def create_feedback(request):
         return render(request, 'feedback/user_feedback.html', {'form': form, 'data': data})
 
 def update_feedback(request, pk):
+
     data = Feedback.objects.get(pk=pk)
     form = FeedbackForm(instance=data)
     if request.method == 'POST':
@@ -39,3 +40,23 @@ def update_feedback(request, pk):
             f.save()
             return redirect("feedback:feedback")
     return render(request, 'feedback/update_feedback.html', {'form': form,})
+
+def admin_permission(request):
+    if not request.user.is_authenticated:
+        return redirect("blog:home")
+    else:
+        data = Feedback.objects.all().order_by('-created')
+        return render(request, 'feedback/admin_permission.html', {'data': data})
+
+
+def admin_permission1(request, pk):
+    if not request.user.is_authenticated:
+        return redirect("blog:home")
+    else:
+        data = Feedback.objects.get(pk=pk)
+        if data.permission == True:
+            data.permission = False
+        else:
+            data.permission = True
+        data.save()
+        return redirect("feedback:admin_permission")
