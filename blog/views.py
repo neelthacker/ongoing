@@ -69,7 +69,7 @@ def post_list(request):
 
 # In this function the detail information of post is shown and slug is used as unique key for post
 def post_detail(request, slug, page):
-    url = request.META.get('HTTP_REFERER')
+    # url = request.META.get('HTTP_REFERER')
     post = get_object_or_404(Post, slug=slug)
     comment = Comments.objects.filter(post__slug=slug).order_by('-created')
     # if post.likes.filter(id=request.user.id).exists():
@@ -263,7 +263,7 @@ def comment(request, slug):
             data = Comments()
             f = form.save(commit=False)
             f.author = request.user
-            f.post = Post.objects.filter(slug=slug).first()
+            f.post = Post.objects.get(slug=slug)
             data.score = form.cleaned_data['score']
             f.save()
             return redirect('blog:home')
@@ -277,6 +277,30 @@ def comment_delete(request, pk):
         order.delete()
         return redirect('blog:home')
     return render(request, 'blog/comment_delete.html', {'item': order})
+
+def post_comments(request):
+
+    post = Post.objects.all()
+    return render(request, 'blog/post_comments.html', {'data':post})
+
+def comment_permission(request, slug):
+
+    post = Post.objects.get(slug=slug)
+    comment = Comments.objects.filter(post__slug=slug).order_by('-created')
+    return render(request, 'blog/comment_permission.html', {'data': post, 'comment' : comment})
+
+def comment_permission1(request, slug, pk):
+
+    data = Comments.objects.get(pk=pk)
+    if data.permission == True:
+        data.permission = False
+    else:
+        data.permission = True
+    data.save()
+    return HttpResponseRedirect("/comment_permission/"+slug+"/")
+
+
+
 
 
 # class BlogPostDetailView(DetailView):

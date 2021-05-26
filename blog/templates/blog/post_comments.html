@@ -1,0 +1,48 @@
+{% extends 'blog/base.html' %} 
+{% block content %}
+<style>
+    body {
+        font-family: "Roboto", sans-serif;
+        font-size: 18px;
+        background-color: #fdfdfd;
+    }
+    
+    .head_text {
+        color: white;
+    }
+    
+    .card {
+        box-shadow: 0 16px 48px #E3E7EB;
+    }
+     
+    .checked {
+        color: orange;
+    }
+</style>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 card mb-4  mt-3 left  top">
+      <div class="card-body">
+        {% if data %}
+            {% for i in data %}
+                <h1>{% block title %} {{ i.title }} {% endblock title %}</h1>
+                <p class=" text-muted">{{ i.author }} | {{ i.created_on }}</p>
+                {% if i.image %}
+                <img src="{{i.image.url}}" class="rounded" width="25%">
+                <br>
+                {% endif %}
+                <p class="card-text ">{{ i.content | safe }}</p>
+                <a class="btn btn-warning" href="{% url 'blog:comment_permission' slug=i.slug  %}">View this post</a>
+                <br>
+                <hr>
+            {% endfor %}
+        {% else %}
+            <h1>No Posts !!!!! </h1>
+        {% endif %} 
+            
+      </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

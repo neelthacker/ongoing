@@ -1,0 +1,77 @@
+{% extends 'blog/base.html' %} {% block content %}
+{% load static %}
+<style>
+    body {
+        font-family: "Roboto", sans-serif;
+        font-size: 18px;
+        background-color: #fdfdfd;
+    }
+    
+    .head_text {
+        color: white;
+    }
+    
+    .card {
+        box-shadow: 0 16px 48px #E3E7EB;
+    }
+    
+    .checked {
+        color: orange;
+    }
+
+</style>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 card mb-4  mt-3 left  top">
+      <div class="card-body">
+    
+        <h1> Admin Permissiom</h1>
+        <br><br>
+        {% if data %}
+
+        <h1>{% block title %} {{ data.title }} {% endblock title %}</h1>
+        <p class=" text-muted">{{ data.author }} | {{ data.created_on }}</p>
+        {% if data.image %}
+          <img src="{{data.image.url}}" class="rounded" width="25%">
+          <br>
+          <br>
+        {% endif %}
+
+          <table style="width:100%">
+          <tr>
+            <th style='text-align: left;'>Name</th>
+            <th style='text-align: center;'>Feedback</th>
+            <th style='text-align: center;'>Rating</th> 
+            <th style='text-align: right;'>Permissiom</th>
+          </tr>
+        
+          {% for i in comment %}
+            <tr>
+              <td style='text-align: left;'><p class=" text-muted">{{ i.author }} </p></td>
+              <td style='text-align: center;'><p class="card-text ">{{ i.text | safe }}</p></td>
+              <td> <span class="fa fa-star {%if i.score >= 1 %}checked {% else %} unchecked {% endif %} "></span>
+                <span class="fa fa-star {%if i.score >= 2 %}checked {% else %} unchecked {% endif %}"></span>
+                <span class="fa fa-star {%if i.score >= 3 %}checked {% else %} unchecked {% endif %}"></span>
+                <span class="fa fa-star {%if i.score >= 4 %}checked {% else %} unchecked {% endif %}"></span>
+                <span class="fa fa-star {%if i.score >= 5 %}checked {% else %} unchecked {% endif %}"></span>
+              </td>
+              <td style='text-align: right;'>{% if i.permission == True %}
+                <a class="btn btn-danger" href="{% url 'blog:comment_permission1' slug=data.slug pk=i.pk  %}">revoke permission</a><br><br>
+              {% else %}
+              <a class="btn btn-warning" href="{% url 'blog:comment_permission1' slug=data.slug pk=i.pk  %}">grant permission</a><br><br>
+              {% endif %}
+              </td>
+            </tr>
+            
+          {% endfor %}
+        </table>
+      {% else %}
+        No Feedbacks!!!!!!!!!
+      {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

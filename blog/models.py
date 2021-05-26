@@ -71,9 +71,9 @@ class Comments(models.Model):
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='commentAuther')
     created = models.DateTimeField(auto_now_add=True)
+    permission = models.BooleanField(default=False)
 
-    def __str__(self):
-        return self.post
+    
 
 
 

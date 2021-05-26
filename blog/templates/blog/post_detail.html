@@ -52,11 +52,14 @@
         <hr>
         <a class="nav-link text-black font-weight-bold"href="{% url 'blog:comment' slug=data.slug  %}">Add Comment</a>
              
-            
-        {% if comment %}
         
+
+        {% if comment %}
+
             {% for i in comment %}
             
+            {% if i.permission == True %}
+
             <p class=" text-muted">{{ i.author }} | {{ i.created }}</p>
             <span class="fa fa-star {%if i.score >= 1 %}checked {% else %} unchecked {% endif %} "></span>
             <span class="fa fa-star {%if i.score >= 2 %}checked {% else %} unchecked {% endif %}"></span>
@@ -70,6 +73,8 @@
             <a class="btn btn-danger" href="{% url 'blog:comment_delete' pk=i.pk  %}">Delete</a><br><br>
             {% endif %}
             <hr>
+            {% endif %}
+
             {% endfor %}
            
         {% else %}

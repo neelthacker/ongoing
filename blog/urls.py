@@ -21,6 +21,9 @@ urlpatterns = [
     path(r'ajax_category/', views.ajax_category, name='ajax_category'),
     path(r'<slug:slug>/comment', views.comment, name='comment'),
     path(r'comment_delete/<int:pk>/', views.comment_delete, name='comment_delete'),
+    path(r'post_comments/', views.post_comments, name='post_comments'),
+    path(r'comment_permission/<slug:slug>/', views.comment_permission, name='comment_permission'),
+    path(r'comment_permission1/<slug:slug>/<int:pk>/', views.comment_permission1, name='comment_permission1'),
     # path('blogpost-like/<int:pk>', views.post_detail, name="blogpost_like"),
 
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
