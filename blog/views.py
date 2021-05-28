@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect, HttpResponseRedirect
 from django.template.loader import render_to_string
-from django.views.generic import RedirectView, DetailView
+from django.db.models import Avg
 
 from blog.forms import CategoryForm, CreatePost, SignUpForm, CommentForm
 from blog.models import Category, Post, Comments
@@ -71,15 +71,9 @@ def post_list(request):
 def post_detail(request, slug, page):
     # url = request.META.get('HTTP_REFERER')
     post = get_object_or_404(Post, slug=slug)
-    comment = Comments.objects.filter(post__slug=slug).order_by('-created')
-    # if post.likes.filter(id=request.user.id).exists():
-    #     post.likes.remove(request.user)
-    #     if counter > 0:
-    #         counter-=1
-    # else:
-    #     post.likes.add(request.user)
-    #     counter+=1
-    context = {'data':post, 'page_no':page, 'comment':comment,}
+    comment = Comments.objects.filter(post__slug=slug, permission = True ).order_by('-created')
+    average = comment.aggregate(Avg("score"))["score__avg"]
+    context = {'data':post, 'page_no':page, 'comment':comment,'average':average}
     return render(request, 'blog/post_detail.html', context)
 
 
